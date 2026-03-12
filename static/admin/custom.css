@@ -1,0 +1,49 @@
+/* Inputs mais visíveis */
+
+input,
+select,
+textarea {
+    border: 2px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    padding: 8px 10px !important;
+}
+
+/* Foco roxo estilo Django */
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #7c3aed !important;
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.25) !important;
+}
+
+/* Campo file upload */
+
+input[type="file"] {
+    background: #ffffff !important;
+    border: 2px dashed #9ca3af !important;
+}
+
+/* Cards do formulário */
+
+.unfold-card {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 12px !important;
+    padding: 18px !important;
+}
+
+/* Títulos das seções */
+
+.unfold-card h2,
+.unfold-card h3 {
+    color: #111827 !important;
+    font-weight: 600;
+}
+
+button,
+input[type="submit"] {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
