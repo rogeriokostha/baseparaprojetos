@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 from django.templatetags.static import static
 from datetime import timedelta
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,11 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1f=442xi&a%d&z!&7gz+-jxglp@#u1q!6zd+^ze+r*_(nwsn)0'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-dev")
+DEBUG = config("DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'users.User'
