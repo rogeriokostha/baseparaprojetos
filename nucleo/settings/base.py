@@ -10,6 +10,7 @@ SECRET_KEY = config("SECRET_KEY", default="django-insecure-dev")
 AUTH_USER_MODEL = "users.User"
 
 INSTALLED_APPS = [
+    'corsheaders',
     "unfold",
     "apps.core",
     "apps.users.apps.UsersConfig",
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -125,3 +127,4 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+CORS_ALLOW_ALL_ORIGINS = True
