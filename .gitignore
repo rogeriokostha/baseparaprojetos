@@ -1,25 +1,42 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# ================================
+# BACKEND (Django / Python)
+# ================================
+backend/venv/
+backend/.env
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/**/*.pyd
+backend/.vscode/
 
-# Virtualenv
-venv/
-.env
+# ================================
+# FRONTEND (Next.js / Node)
+# ================================
+frontend/node_modules/
+frontend/.next/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/out/
+frontend/build/
 
-# Database
-db.sqlite3
-
-# Media
-media/
-
-# Static collected
-staticfiles/
-
-# VSCode
-.vscode/
-
-# OS
+# ================================
+# SISTEMA OPERACIONAL
+# ================================
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# ================================
+# EDITORES
+# ================================
+.vscode/
+.idea/
+*.swp
+*.swo

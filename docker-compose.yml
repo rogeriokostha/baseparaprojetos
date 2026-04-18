@@ -1,0 +1,76 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: dev_imortal_db
+    restart: always
+    environment:
+      POSTGRES_DB: dev_imortal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: dev_imortal_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dev_imortal_backend
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      # Mapeamento do código fonte da máquina para dentro do container
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      # Puxando as vars globais que a API agora espera:
+      - DEBUG=True
+      - SECURE_SSL_REDIRECT=False
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=dev_imortal
+      - DB_USER=postgres
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - REDIS_URL=redis://redis:6379/0
+      # Por ser ambiente local docker, liberar CORS total é válido para o Front
+      - DJANGO_SETTINGS_MODULE=nucleo.settings.dev
+    depends_on:
+      - db
+      - redis
+
+  # =========================================================
+  # Descomente o bloco abaixo assim que configurar o arquivo 
+  # celery.py no Django para habilitar rotinas em Background.
+  # =========================================================
+  # celery_worker:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: dev_imortal_celery
+  #   command: celery -A nucleo worker -l info
+  #   volumes:
+  #     - ./backend:/app
+  #   environment:
+  #     - DB_HOST=db
+  #     - REDIS_URL=redis://redis:6379/0
+  #     - DB_PORT=5432
+  #     - DB_NAME=dev_imortal
+  #     - DB_USER=postgres
+  #     - DB_PASSWORD=${DB_PASSWORD:-postgres}
+  #     - DJANGO_SETTINGS_MODULE=nucleo.settings.dev
+  #   depends_on:
+  #     - db
+  #     - redis
+  #     - backend
+
+volumes:
+  postgres_data:
