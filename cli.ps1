@@ -6,6 +6,23 @@ param (
     $RestArgs
 )
 
+# Verifica se existe um .env na raiz contendo o nome do projeto (para isolamento dos containers)
+if (-Not (Test-Path -Path ".\.env")) {
+    Write-Host ""
+    Write-Host "========== CONFIGURAÇÃO DE ISOLAMENTO ==========" -ForegroundColor Cyan
+    Write-Host "Para evitar conflito de containers com outros projetos usando este mesmo boilerplate," -ForegroundColor Yellow
+    $ProjectName = Read-Host "Digite o NOME DESTE PROJETO, sem espaços (ex: meunovo_projeto)"
+    if ([string]::IsNullOrWhiteSpace($ProjectName)) { 
+        $ProjectName = "dev_imortal" 
+    }
+    
+    # Cria o .env na raiz que o Docker Compose lê por padrão
+    Set-Content -Path ".\.env" -Value "PROJECT_NAME=$ProjectName`nCOMPOSE_PROJECT_NAME=$ProjectName"
+    Write-Host "=> Arquivo .env gerado na raiz com PROJECT_NAME=$ProjectName" -ForegroundColor Gray
+    Write-Host "================================================" -ForegroundColor Cyan
+    Write-Host ""
+}
+
 switch ($Command) {
     "up" { 
         Write-Host "Iniciando os containers..." -ForegroundColor Green
@@ -32,6 +49,15 @@ switch ($Command) {
             Copy-Item -Path ".\.env.example" -Destination "frontend\.env.local"
             Write-Host " => Arquivo frontend\.env.local gerado." -ForegroundColor Gray
         }
+
+        Write-Host "Configurando ambiente Virtual Python Local (venv) para a IDE..." -ForegroundColor Cyan
+        if (-Not (Test-Path -Path "venv")) {
+            python -m venv venv
+            Write-Host " => pasta venv criada na raiz." -ForegroundColor Gray
+        }
+        Write-Host " => Instalando pacotes locais no venv (isso pode levar uns segundos)..." -ForegroundColor Gray
+        .\venv\Scripts\python.exe -m pip install --quiet --upgrade pip
+        .\venv\Scripts\python.exe -m pip install --quiet -r backend\requirements.txt
 
         Write-Host "Iniciando Banco, Cache e Servidor Backend..." -ForegroundColor Green
         docker-compose up -d
