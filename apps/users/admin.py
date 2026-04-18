@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 
 from .models import User
 
@@ -150,7 +150,7 @@ class UserAdmin(BaseUserAdmin):
                 '<img src="{}" width="36" height="36" style="border-radius:50%; object-fit:cover; border:1px solid #d1d5db;" />',
                 obj.avatar.url
             )
-        return format_html(
+        return mark_safe(
             '<div style="width:36px; height:36px; border-radius:50%; background:#e5e7eb; display:flex; align-items:center; justify-content:center; font-size:12px; color:#374151;">-</div>'
         )
     avatar_preview.short_description = "Avatar"
