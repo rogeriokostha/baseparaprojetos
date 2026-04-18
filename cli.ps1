@@ -20,17 +20,35 @@ switch ($Command) {
         docker-compose build 
     }
     "setup" {
-        Write-Host "Iniciando setup incial do projeto base (Boilerplate)..." -ForegroundColor Green
+        Write-Host "Iniciando setup incial do Boilerplate Dev-Imortal..." -ForegroundColor Green
+
+        # Setup de Arquivos Base (.env)
+        Write-Host "Configurando variáveis e senhas locas..." -ForegroundColor Cyan
+        if (-Not (Test-Path -Path "backend\.env")) {
+            Copy-Item -Path ".\.env.example" -Destination "backend\.env"
+            Write-Host " => Arquivo backend\.env gerado." -ForegroundColor Gray
+        }
+        if (-Not (Test-Path -Path "frontend\.env.local")) {
+            Copy-Item -Path ".\.env.example" -Destination "frontend\.env.local"
+            Write-Host " => Arquivo frontend\.env.local gerado." -ForegroundColor Gray
+        }
+
+        Write-Host "Iniciando Banco, Cache e Servidor Backend..." -ForegroundColor Green
         docker-compose up -d
-        Write-Host "Esperando o ambiente Subir (5 segundos)..." -ForegroundColor Yellow
+        Write-Host "Esperando Instalação do Container (5 segundos)..." -ForegroundColor Yellow
         Start-Sleep -Seconds 5
+
         Write-Host "Aplicando migrações no banco de dados..." -ForegroundColor Green
         docker-compose exec backend python manage.py migrate
-        Write-Host "Instalando pacotes do painel frontend Next.js..." -ForegroundColor Cyan
+        
+        Write-Host "Configurando Frontend e seu ecossistema Node..." -ForegroundColor Cyan
         Push-Location .\frontend
         npm install
         Pop-Location
-        Write-Host "Para acessar o painel frontend, utilize: cd frontend e npm run dev" -ForegroundColor Green
+
+        Write-Host ""
+        Write-Host "✅ Setup finalizado com sucesso! Seu boilerplate está pronto para a guerra!" -ForegroundColor Green
+        Write-Host "Para acessar o front-end, crie outro terminal, entre em 'cd frontend' e rode 'npm run dev'." -ForegroundColor Yellow
     }
     "migrate" { 
         Write-Host "Aplicando migrações na API e Banco de Dados..." -ForegroundColor Green

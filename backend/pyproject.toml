@@ -1,0 +1,27 @@
+[tool.ruff]
+# Define a largura máxima de linha.
+line-length = 88
+
+# Versão base do Python (para modernizações automáticas se aplicável)
+target-version = "py310"
+
+# Exclua diretórios conhecidos.
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".venv",
+    "venv",
+    "migrations",
+]
+
+[tool.ruff.lint]
+# Seleciona as regras básicas (E = pycodestyle, F = Pyflakes, I = isort)
+select = ["E", "F", "I", "W", "UP"]
+
+ignore = [
+    "E501", # Ignora linha longa onde quebrar atrapalhará (deixaremos o formatter regular melhor)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["nucleo", "apps"]
